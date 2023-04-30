@@ -1,0 +1,26 @@
+class Company:
+    def __init__(self,name):
+        self.name= name
+        self.employees = []
+        self.cars = []
+    
+class Employee:
+    def __init__(self, name, age, dateOfBirth, idNumber, department, jobTitle, basicSalary):
+        self.name = name
+        self.age= age
+        self.dateOfBirth= dateOfBirth
+        self.idNumber = idNumber
+        self.department = department
+        self.jobTitle = jobTitle
+        self.basicSalary = basicSalary
+class Car:
+    def __init__(self, name, idNumber, price, carType):
+        self.name = name
+        self.idNumber = idNumber
+        self.price = price
+        self.carType = carType
+class Sales:
+    def __init__(self, salesperson, car, sale_price):
+        self.salesperson = salesperson
+        self.car = car
+        self.sale_price = sale_price
