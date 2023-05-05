@@ -1,0 +1,110 @@
+from enum import Enum
+class CarType(Enum):
+  Hatch=1
+  Sedan=2
+  SUV=3
+
+class Color(Enum):
+    White=1
+    Black=2
+    Blue=3
+    Red=4
+    
+#class Department(Enum):
+    Accounting=1
+    IT=2
+    Manufacturing=3
+
+class JobTitle(Enum):
+    Manager=1
+    Salesperson=2
+
+class Employee:
+    def __init__(self, employeeName, age, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary):
+        self.employeeName = employeeName
+        self.age= age
+        self.dateOfBirth= dateOfBirth
+        self.passportNumber= passportNumber
+        self.employeeIdNumber = employeeIdNumber
+        self.department = department
+        self.jobTitle = jobTitle
+        self.basicSalary = basicSalary
+
+    def setEmployeeIdNumber(self,employeeIdNumber):
+      self.employeeIdNumber = employeeIdNumber
+    def getEmployeeIdNumber(employeeIdNumber):
+      return employeeIdNumber
+class Manager(Employee):
+    def __init__(self, employeeName, age, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary):
+        super().__init__(employeeName, age, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary)
+        self.salespersons = []
+
+class Salesperson(Employee):
+    def __init__(self, employeeName, age, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary, manager):
+        super().__init__(employeeName, age, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary)
+        self.manager=manager
+        self.sales = []
+     
+class Car:
+    def __init__(self, carName, carIdNumber, price, carType, fuelCapacity, year, maxSpeed, color):
+        self.carName = carName
+        self.carIdNumber = carIdNumber
+        self.price = price
+        self.carType = carType
+        self.fuelCapacity = fuelCapacity
+        self.year = year
+        self.maxSpeed = maxSpeed
+        self.color = color
+class Sales:
+    def __init__(self, salesperson, car, salePrice):
+        self.salesperson = salesperson
+        self.car = car
+        self.salePrice = salePrice
+class Company:
+    def __init__(self,companyName):
+        self.companyName= companyName
+        self.employees = []
+        self.cars = []
+    def addCar(self, car):
+      self.cars.append(car)
+
+    def deleteCar(self, make, model):
+        for car in self.cars:
+            if car.make == make and car.model == model:
+                self.cars.remove(car)
+                break
+
+    def modifyCar(self, make, model, attribute, value):
+        for car in self.cars:
+            if car.make == make and car.model == model:
+                setattr(car, attribute, value)
+                break
+    def getEmployeeDetails(self, employeeIdNumber):
+        for employee in self.employees:
+            if employee.employeeIdNumber == employeeIdNumber:
+                return f"Name: {employee.employeeName}, Age: {employee.age}, Date Of Birth: {employee.dateOfBirth}, Passport Number: {employee.passportNumber}, ID Number: {employee.employeeIdNumber}, Department: {employee.department}, Job Title: {employee.jobTitle}, Basic Salary: {employee.basicSalary}"
+        return "Employee not found."
+
+    def getCarDetails(self, carIdNumber):
+        for car in self.cars:
+            if car.carIdNumber == carIdNumber:
+                return f"Name: {car.carName}, ID Number: {car.carIdNumber}, Price: {car.price}, Type: {car.carType},Fuel Capacity: {car.fuelCapacity}, Year: {car.year}, Max Speed: {car.maxSpeedce}, Color: {car.color}"
+        return "Car not found."   
+    def displaySalesDetails(self, employee_id):
+        salesperson = None
+        for employee in self.employees:
+            if employee.employeeIdNumber == employee_id and isinstance(employee, Salesperson):
+                salesperson = employee
+                break
+        if not salesperson:
+            return "Salesperson not found."
+        sales_details = []
+        for sale in self.sales:
+            if sale.salesperson == salesperson:
+                sales_details.append(sale)
+        if not sales_details:
+            return "No sales found for this employee."
+        result = f"Sales details for {salesperson.employeeName} (ID: {salesperson.employeeIdNumber}):\n"
+        for sale in sales_details:
+            result += f"Car ID: {sale.car.carIdNumber}, Sale Price: {sale.price}\n"
+        return result
