@@ -1,0 +1,156 @@
+from enum import Enum
+import pickle
+class CarType(Enum):
+  Hatch=1
+  Sedan=2
+  SUV=3
+
+class Color(Enum):
+    White=1
+    Black=2
+    Blue=3
+    Red=4
+class Gender(Enum):
+  Male=1
+  Female=2
+
+class Nationality(Enum):
+  UAE=1
+  KSA=2
+  UK=3
+  USA=4
+  EGY=5
+
+class Employee:
+  def __init__(self, employeeName, age, gender, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary):
+    self.employeeName = employeeName
+    self.age= age
+    self.gender= gender
+    self.dateOfBirth= dateOfBirth
+    self.passportNumber= passportNumber
+    self.employeeIdNumber = employeeIdNumber
+    self.department = department
+    self.jobTitle = jobTitle
+    self.basicSalary = basicSalary
+
+  def setEmployeeIdNumber(self,employeeIdNumber):
+    self.employeeIdNumber = employeeIdNumber
+  def getEmployeeIdNumber(employeeIdNumber):
+    return employeeIdNumber
+class Manager(Employee):
+  def __init__(self, employeeName, age, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary):
+    super().__init__(employeeName, age, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary)
+    self.salespersons = []
+    self.commission = 0
+  def calculate_salary(self):
+    return 5000 + self.commission
+
+class Salesperson(Employee):
+  def __init__(self, employeeName, age, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary, manager):
+    super().__init__(employeeName, age, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary)
+    self.manager=manager
+    self.commission = 0
+    manager.salespersons.append(self)
+  def set_manager(self, manager):
+    self.manager = manager
+  def make_sale(self, car, price):
+    commission = price * 0.065
+    self.commission += commission
+    manager_commission = price * 0.035
+    self.manager.commission += manager_commission
+    company_profit = price - commission - manager_commission
+    Company.add_profit(company_profit)
+    return (commission, manager_commission)
+
+    def calculate_salary(self):
+      return 2500 + self.commission
+
+class Company:
+    def __init__(self,companyName):
+        self.companyName= companyName
+        self.employees = []
+        self.cars = []
+        self.sales=[]
+        profit = 0
+    def add_profit(self, amount):
+        self.profit += amount
+    def addCar(self, car):
+      self.cars.append(car)
+
+    def deleteCar(self, make, model):
+        for car in self.cars:
+            if car.make == make and car.model == model:
+                self.cars.remove(car)
+                break
+
+    def modifyCar(self, make, model, attribute, value):
+        for car in self.cars:
+            if car.make == make and car.model == model:
+                setattr(car, attribute, value)
+                break
+
+    def getEmployeeDetails(self, employeeIdNumber):
+        for employee in self.employees:
+            if employee.employeeIdNumber == employeeIdNumber:
+                return f"Name: {employee.employeeName}, Age: {employee.age}, Date Of Birth: {employee.dateOfBirth}, Passport Number: {employee.passportNumber}, ID Number: {employee.employeeIdNumber}, Department: {employee.department}, Job Title: {employee.jobTitle}, Basic Salary: {employee.basicSalary}"
+        return "Employee not found."
+
+    def getCarDetails(self, carIdNumber):
+        for car in self.cars:
+            if car.carIdNumber == carIdNumber:
+                return f"Name: {car.carName}, ID Number: {car.carIdNumber}, Price: {car.price}, Type: {car.carType},Fuel Capacity: {car.fuelCapacity}, Year: {car.year}, Max Speed: {car.maxSpeedce}, Color: {car.color}"
+        return "Car not found."   
+
+    def displaySalesDetails(self, employee_id):
+        salesperson = None
+        for employee in self.employees:
+            if employee.employeeIdNumber == employee_id and isinstance(employee, Salesperson):
+                salesperson = employee
+                break
+        if not salesperson:
+            return "Salesperson not found."
+        sales = []
+        for sale in self.sales:
+            if sale.salesperson == salesperson:
+                sales.append(sale)
+        if not sales:
+            return "No sales found for this employee."
+        result = f"Sales details for {salesperson.employeeName} (ID: {salesperson.employeeIdNumber}):\n"
+        for sale in sales:
+            result += f"Car ID: {sale.car.carIdNumber}, Sale Price: {sale.price}\n"
+        return result
+
+    def save_data(self):
+        with open('data.pickle', 'wb') as f:
+            pickle.dump((self.employees, self.cars, self.sales, self.profit), f)
+
+    def load_data(self):
+        with open('data.pickle', 'rb') as f:
+            self.employees, self.cars, self.sales, self.profit = pickle.load(f)
+
+
+class Customer:
+  def __init__(self, firstName, lastName, customerIdNumber, gender, nationality, phoneNumber):
+    self.firstName = firstName
+    self.lastName = lastName
+    self.customerIdNumber = customerIdNumber
+    self.gender = gender
+    self.nationality = nationality
+    self.phoneNumber = phoneNumber
+
+class Car:
+  def __init__(self, carName, carIdNumber, price, carType, fuelCapacity, year, maxSpeed, color):
+    self.carName = carName
+    self.carIdNumber = carIdNumber
+    self.price = price
+    self.carType = carType
+    self.fuelCapacity = fuelCapacity
+    self.year = year
+    self.maxSpeed = maxSpeed
+    self.color = color
+
+class Sales:
+    def __init__(self, salesperson, car, salePrice):
+        self.salesperson = salesperson
+        self.car = car
+        self.salePrice = salePrice
