@@ -1,0 +1,6 @@
+salary1 = salesperson1.calculate_salary(car1, float(sale1.salePrice))
+salary2 = salesperson1.calculate_salary(car2, float(sale2.salePrice))
+salary3 = salesperson1.calculate_salary(car2, float(sale3.salePrice))
+salary4 = salesperson1.calculate_salary(car3, float(sale4.salePrice))
+salary5 = salesperson1.calculate_salary(car3, float(sale5.salePrice))
+print(salary1 + salary2 + salary3 + salary4 + salary5)
