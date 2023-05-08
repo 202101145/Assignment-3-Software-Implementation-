@@ -1,0 +1,272 @@
+# Importing the Enum class from the enum module
+from enum import Enum 
+import pickle # importing pickle module
+class CarType(Enum): # Define an enum class called "CarType"
+    Hatch=1
+    Sedan=2
+    SUV=3
+class JobTitle(Enum): # Define an enum class called "JobTitle"
+    Manager=1
+    Salesperson=2
+class Department(Enum): # Define an enum class called "Department"
+    Accounting=1
+    IT=2
+    Manufacturing=3
+class Color(Enum):# Define an enum class called "Color"
+    White=1
+    Black=2
+    Blue=3
+    Red=4
+class Gender(Enum):# Define an enum class called "Gender"
+    Male=1
+    Female=2
+class Nationality(Enum):# Define an enum class called "Nationality"
+    UAE=1
+    KSA=2
+    UK=3
+    USA=4
+    EGY=5
+#Define a class called "Employee" with its instance variables 
+class Employee:
+  def __init__(self, employeeName, age, gender, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary):# Define the constructor method for the class 
+    # Set the instance variables for each object of the class
+    self.employeeName = employeeName # Set the employeeName attribute
+    self.age= age # Set the age attribute
+    self.gender= gender # Set the gender attribute
+    self.dateOfBirth= dateOfBirth # Set the dateOfBirth attribute
+    self.passportNumber= passportNumber # Set the passportNumber attribute
+    self.employeeIdNumber = employeeIdNumber # Set the employeeIdNumber attribute
+    self.department = department # Set the department attribute
+    self.jobTitle = jobTitle # Set the jobTitle attribute
+    self.basicSalary = float(basicSalary) # Set the basicSalary attribute
+    # Getter and Setter methods for gender
+  def setEmployeeName(self,employeeName):
+    self.employeeName = employeeName
+  def getEmployeeName(employeeName):
+    return employeeName
+  def setAge(self,age):
+    self.age = age
+  def getAge(age):
+    return age
+  # Getter and Setter methods for gender
+  def setGender(self, gender):
+    self.gender = gender
+  def getGender(self):
+    return self.gender
+  # Getter and Setter methods for dateOfBirth
+  def setDateOfBirth(self, dateOfBirth):
+    self.dateOfBirth = dateOfBirth
+  def getDateOfBirth(self):
+    return self.dateOfBirth
+  # Getter and Setter methods for passportNumber
+  def setPassportNumber(self, passportNumber):
+    self.passportNumber = passportNumber
+  def getPassportNumber(self):
+    return self.passportNumber
+  # Getter and Setter methods for employeeIdNumber
+  def setEmployeeIdNumber(self, employeeIdNumber):
+    self.employeeIdNumber = employeeIdNumber
+  def getEmployeeIdNumber(self):
+    return self.employeeIdNumber
+  # Getter and Setter methods for department
+  def setDepartment(self, department):
+    self.department = department
+  def getDepartment(self):
+    return self.department
+  # Getter and Setter methods for jobTitle
+  def setJobTitle(self, jobTitle):
+    self.jobTitle = jobTitle
+  def getJobTitle(self):
+    return self.jobTitle
+  # Getter and Setter methods for basicSalary
+  def setBasicSalary(self, basicSalary):
+    self.basicSalary = basicSalary
+  def getBasicSalary(self):
+    return self.basicSalary
+  def calculate_salary(self):
+    pass
+  def displayInfo(self): #function to display all info
+    print(f"\nEmployee Info:\nemployeeName: {self.employeeName}\nage: {self.age}\ngender: {self.gender}\ndateOfBirth: {self.dateOfBirth}\npassportNumber: {self.passportNumber}\nemployeeIdNumber: {self.employeeIdNumber}\ndepartment: {self.department}\njobTitle: {self.jobTitle}\nbasicSalary: {self.basicSalary} ")
+  
+class Manager(Employee):  # Defining a Manager class that inherits from the Employee class
+  def __init__(self, employeeName, age, gender, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary, company, salespersons= None): # Define the constructor method for the class
+    # Calling the constructor of the parent class (Employee) and passing its attributes
+    super().__init__(employeeName, age, gender, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary)
+    self.salespersons = salespersons if salespersons is not None else []
+    self.company= company
+  def setSalespersons(self, salespersons):
+    self.salespersons.append(salespersons)
+  def getSalespersons(self):
+    return self.salespersons
+  def setCompany(self, company):
+    self.company = company
+  def getCompany(self):
+    return self.company
+  def displayInfo(self): #function to display all info
+    Employee.displayInfo(self)
+    print("salespersons:")
+    for salespersons in self.salespersons: #Display information for all sales
+      salespersons.displayInfo()    
+        
+
+class Salesperson(Employee):
+  def __init__(self, employeeName, age, gender, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary, manager, sales=None):
+    super().__init__(employeeName, age, gender, dateOfBirth, passportNumber, employeeIdNumber, department, jobTitle, basicSalary)
+    self.manager=manager
+    self.basicSalary=basicSalary
+    self.sales = sales if sales is not None else []
+  def setSales(self, sales):
+    self.sales.append(sales)
+  def getSales(self):
+    return self.sales   
+  def set_manager(self, manager):
+    self.manager = manager
+  def calculate_salary(self, car, salePrice):
+    # calculate the profit for the sale
+    profit = salePrice - car.price
+        
+    # calculate the amount for the salesperson, manager, and company
+    salesperson_amount = profit * 0.065
+    manager_amount = profit * 0.035
+    company_amount = profit - salesperson_amount - manager_amount
+
+    # add the amounts to each employee's salary
+    self.basicSalary+= salesperson_amount
+    self.manager.basicSalary += manager_amount
+    self.manager.company.revenue += company_amount
+
+    return self.basicSalary
+    return self.manager.basicSalary
+    return self.manager.company.revenue
+
+class Company:
+    def __init__(self,companyName,employees=None, cars=None, sales=None ):
+        self.companyName= companyName
+        self.employees = employees if employees is not None else []
+        self.cars = cars if cars is not None else []
+        self.sales=sales if sales is not None else []
+        self.revenue = 0
+    def setEmployees(self,employee ):
+      self.employees.append(employee)
+    def getEmployees(self):
+      return self.employee
+    def setCars(self, car):
+      self.cars.append(car)
+    def getCars(self):
+      return self.car
+    def setSales(self, Sales):
+      self.sales.append(Sales)
+    def getSales(self):
+      return self.sales
+    def displayInfo(self): #function to display all info
+        print(f"\nCompany Info:\ncompanyName: {self.companyName}")
+        print("Employees:")
+        for employee in self.employees: #Display information for all services
+            employee.displayInfo()
+        print("Cars :")
+        for cars in self.cars: #Display information for all staff
+            cars.displayInfo()
+        print("Sales:")
+        for sale in self.sales: #Display information for all patients
+            sale.displayInfo()
+    def addCar(self, car):
+      self.cars.append(car)
+
+    def deleteCar(self, make, model):
+        for car in self.cars:
+            if car.make == make and car.model == model:
+                self.cars.remove(car)
+                break
+
+    def modifyCar(self, make, model, attribute, value):
+        for car in self.cars:
+            if car.make == make and car.model == model:
+                setattr(car, attribute, value)
+                break
+
+    def getEmployeeDetails(self, employeeIdNumber):
+        for employee in self.employees:
+            if employee.employeeIdNumber == employeeIdNumber:
+                return f"Name: {employee.employeeName}, Age: {employee.age}, Date Of Birth: {employee.dateOfBirth}, Passport Number: {employee.passportNumber}, ID Number: {employee.employeeIdNumber}, Department: {employee.department}, Job Title: {employee.jobTitle}, Basic Salary: {employee.basicSalary}"
+        return "Employee not found."
+
+    def getCarDetails(self, carIdNumber):
+        for car in self.cars:
+            if car.carIdNumber == carIdNumber:
+                return f"Name: {car.carName}, ID Number: {car.carIdNumber}, Price: {car.price}, Type: {car.carType},Fuel Capacity: {car.fuelCapacity}, Year: {car.year}, Max Speed: {car.maxSpeedce}, Color: {car.color}"
+        return "Car not found."   
+
+    def displaySalesDetails(self, employee_id):
+        salesperson = None
+        for employee in self.employees:
+            if employee.employeeIdNumber == employee_id and isinstance(employee, Salesperson):
+                salesperson = employee
+                break
+        if not salesperson:
+            return "Salesperson not found."
+        sales = []
+        for sale in self.sales:
+            if sale.salesperson == salesperson:
+                sales.append(sale)
+        if not sales:
+            return "No sales found for this employee."
+        result = f"Sales details for {salesperson.employeeName} (ID: {salesperson.employeeIdNumber}):\n"
+        for sale in sales:
+            result += f"Car ID: {sale.car.carIdNumber}, Sale Price: {sale.price}\n"
+        return result
+
+    def save_data(self):
+        with open('data.pickle', 'wb') as f:
+            pickle.dump((self.employees, self.cars, self.sales, self.profit), f)
+
+    def load_data(self):
+        with open('data.pickle', 'rb') as f:
+            self.employees, self.cars, self.sales, self.profit = pickle.load(f)
+
+
+class Customer:
+  def __init__(self, firstName, lastName, customerIdNumber, gender, nationality, phoneNumber):
+    self.firstName = firstName
+    self.lastName = lastName
+    self.customerIdNumber = customerIdNumber
+    self.gender = gender
+    self.nationality = nationality
+    self.phoneNumber = phoneNumber
+
+class Car:
+  def __init__(self, carName, carIdNumber, price, carType, fuelCapacity, year, maxSpeed, color):
+    self.carName = carName
+    self.carIdNumber = carIdNumber
+    self.price = price
+    self.Type = carType
+    self.fuelCapacity = fuelCapacity
+    self.year = year
+    self.maxSpeed = maxSpeed
+    self.color = color
+    def setCarName(self,carName):
+      self.carName= carName
+    def getCarName(self):
+      return self.carName
+    def setPrice(self,price):
+      self.price= price
+    def getPrice(self):
+      return self.price  
+    def setCarIdNumber(self,carIdNumber ):
+      self.carIdNumber = carIdNumber
+    def getCarIdNumber(self):
+      return self.carIdNumber
+    def displayInfo(self): #function to display all info
+        print(f"\nCar Info:\ncarName: {self.carName}\ncarIdNumber: {self.carIdNumber}\nprice: {self.price}\ncarType: {self.carType}\nfuelCapacity: {self.fuelCapacity}\nyear: {self.year}\nmaxSpeed: {self.maxSpeed}\ncolor: {self.color}")
+
+class Sales:
+    def __init__(self, salesperson, car, salePrice, customer):
+        self.salesperson = salesperson
+        self.car = car
+        self.salePrice = salePrice
+        self.customer = customer
+    def setSalePrice(self,salePrice):
+      self.salePrice = salePrice
+    def getSalePrice(self):
+      return self.salePrice
+    def displayInfo(self): #function to display all info
+        print(f"\nSales Info:\nsalesperson: {self.salesperson}\ncar: {self.car}\nsalePrice: {self.salePrice}\ncustomer: {self.customer}")
