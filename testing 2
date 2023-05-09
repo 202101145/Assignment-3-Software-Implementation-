@@ -1,0 +1,17 @@
+# create instances of the classes
+company = Company("B&M Company")
+manager = Manager("Susan Meyers", 35, Gender.Female.name, "11-11-1990", 198754,47899, Department.Accounting.name, JobTitle.Manager.name, 37500, company )
+salesperson1 = Salesperson("Joy Rogers", 28, Gender.Female.name , "3-10-1999", 176321, 81774 , Department.Manufacturing.name , JobTitle.Salesperson.name , 24000, manager,[] )
+# create car
+car1 = Car("Wagoner", "ZX3", 125000, CarType.SUV.name, 12, 2023, 130, Color.Red.name)
+car2 = Car("Jazz", "VX3", 55000, CarType.Hatch.name, 18, 2021, 110, Color.Black.name)
+car3 = Car("Mark3", "SX3", 84000, CarType.Sedan.name, 25, 2015, 120, Color.Blue.name)
+sale1 = Sales(salesperson1, "ZX3", 155000,"Maha")
+#create sales made 
+sale2 = Sales(salesperson1, "VX3", 57800,"Mahraa")
+sale3 = Sales(salesperson1, "VX3", 55000,"Omar")
+sale4 = Sales(salesperson1,"SX3", 89000, "Salem")
+sale5 = Sales(salesperson1,"SX3", 93000,"Mohammed")
+company.setEmployees(manager)
+company.setEmployees(salesperson1)
+company.displayInfo()
