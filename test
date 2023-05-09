@@ -1,0 +1,23 @@
+import pickle #import pickle module 
+#create company
+company = Company("B&M Company")
+# create employees
+manager = Manager("Susan Meyers", 35, Gender.Female.name, "11-11-1990", 198754,47899, Department.Accounting.name, JobTitle.Manager.name, 37500 ,company)
+salesperson1 = Salesperson("Joy Rogers", 28, Gender.Female.name , "3-10-1999", 176321, 81774 , Department.Manufacturing.name , JobTitle.Salesperson.name , 24000, manager,[] )
+salesperson2 = Salesperson("Mark Jones", 42,  Gender.Male.name, "7-7-1995", 187345,39119, Department.IT.name, JobTitle.Salesperson.name, 26000, manager,[]  )
+# Open file for binary writing
+with open("employees.pickle", "wb") as f:
+    # Use pickle module to dump the Employee objects to the file
+    pickle.dump(manager, f)
+    pickle.dump(salesperson1, f)
+    pickle.dump(salesperson2, f)
+# Open file for binary reading
+with open("employees.pickle", "rb") as f:
+    # Use pickle module to load the Employee objects from the file
+    manager = pickle.load(f)
+    salesperson1 = pickle.load(f)
+    salesperson2 = pickle.load(f)
+# try to print some attributes of the Employee objects 
+print(manager.getEmployeeName())
+print(salesperson1.getAge())
+print(salesperson2.getGender())
