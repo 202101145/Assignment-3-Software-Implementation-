@@ -1,0 +1,15 @@
+
+employee1 = Employee("Susan Meyers", 35, Gender.Female.name, "11-11-1990", 198754,47899, Department.Accounting.name, JobTitle.Manager.name, 37500)
+employee2 = Employee("Joy Rogers", 28, Gender.Female.name , "3-10-1999", 176321, 81774 , Department.Manufacturing.name , JobTitle.Salesperson.name , 24000)
+employee3 = Employee("Mark Jones", 42,  Gender.Male.name, "7-7-1995", 187345,39119, Department.IT.name, JobTitle.Salesperson.name, 26000)
+company.setEmployees(employee1)
+company.setEmployees(employee2)
+company.setEmployees(employee3)
+
+# test getEmployeeDetails with existing employee ID
+details = company.getEmployeeDetails(47899)
+print(details)  # output: Name: Jane Smith, Age: 28, Date Of Birth: 01-01-1995, Passport Number: CD67890, ID Number: E002, Department: Marketing, Job Title: Marketing Manager, Basic Salary: 70000.0
+
+# test getEmployeeDetails with non-existing employee ID
+details = employee.getEmployeeDetails("E004")
+print(details)  # output: Employee not found.
