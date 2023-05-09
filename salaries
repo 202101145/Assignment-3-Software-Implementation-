@@ -1,0 +1,81 @@
+# create company
+company = Company("B&M Company")
+
+# create manager
+manager = Manager("Susan Meyers", 35, Gender.Female.name, "11-11-1990", 198754,47899, Department.Accounting.name, JobTitle.Manager.name, 37500 ,company)
+
+# create salesperson
+salesperson1 = Salesperson("Joy Rogers", 28, Gender.Female.name , "3-10-1999", 176321, 81774 , Department.Manufacturing.name , JobTitle.Salesperson.name , 24000, manager,[] )
+salesperson2 = Salesperson("Mark Jones", 42,  Gender.Male.name, "7-7-1995", 187345,39119, Department.IT.name, JobTitle.Salesperson.name, 26000, manager,[]  )
+# create car
+car1 = Car("Wagoner", "ZX3", 125000, CarType.SUV.name, 12, 2023, 130, Color.Red.name)
+car2 = Car("Jazz", "VX3", 55000, CarType.Hatch.name, 18, 2021, 110, Color.Black.name)
+car3 = Car("Mark3", "SX3", 84000, CarType.Sedan.name, 25, 2015, 120, Color.Blue.name)
+#create cutomers
+customer1= Customer("Maha", "Alkhateri", 1145, Gender.Female.name, 5505153514)
+customer2= Customer("Mahraa", "Alkhateri", 12275, Gender.Female.name,1505153432)
+customer3= Customer("Omar", "Alali", 7724, Gender.Male.name,  1505553422)
+customer4= Customer("Salem", "Alkhateri", 4532, Gender.Male.name, 2565155672)
+customer5= Customer("Mohammed", "Mark", 9876, Gender.Male.name, 4525157632)
+customer6= Customer("Mohammed", "Salem", 3456, Gender.Male.name, 3564567832)
+customer7= Customer("Najla", "Ahmed", 2314, Gender.Female.name, 357456123)
+customer8= Customer("Lily", "Jeremy", 1820, Gender.Female.name, 1502341987)
+customer9= Customer("Fatma", "Alketbi", 4455, Gender.Female.name, 1567874532)
+customer10= Customer("Khaild", "Obaid", 3321, Gender.Male.name, 2541238976)
+
+# create sales made
+sale1 = Sales(salesperson1, car1, 155000,customer1)
+sale2 = Sales(salesperson1, "VX3", 57800,customer2)
+sale3 = Sales(salesperson1, "VX3", 55000,customer3)
+sale4 = Sales(salesperson1,"SX3", 89000, customer4)
+sale5 = Sales(salesperson1,"SX3", 93000,customer5)
+sale6 = Sales(salesperson2, "VX3", 58000, customer6)
+sale7 = Sales(salesperson2,"VX3", 58000, customer7)
+sale8 = Sales(salesperson2,"VX3", 158000, customer8)
+sale9 = Sales(salesperson2,"VX3", 158000, customer9)
+sale10 = Sales(salesperson2,"VX3", 158000, customer10)
+
+#return the salary after each sale made for two salespersons
+salary1 = salesperson1.calculate_salary(car1, float(sale1.salePrice))
+salary2 = salesperson1.calculate_salary(car2, float(sale2.salePrice))
+salary3 = salesperson1.calculate_salary(car2, float(sale3.salePrice))
+salary4 = salesperson1.calculate_salary(car3, float(sale4.salePrice))
+salary5 = salesperson1.calculate_salary(car3, float(sale5.salePrice))
+salary6 = salesperson2.calculate_salary(car2, float(sale6.salePrice))
+salary7 = salesperson2.calculate_salary(car2, float(sale7.salePrice))
+salary8 = salesperson2.calculate_salary(car2, float(sale8.salePrice))
+salary9 = salesperson2.calculate_salary(car2, float(sale9.salePrice))
+salary10 = salesperson2.calculate_salary(car2, float(sale10.salePrice))
+
+#get the general profit earned 
+profit_overall = (sale1.getSalePrice() - car1.getPrice()) +(sale2.getSalePrice() - car2.getPrice()) +(sale3.getSalePrice() - car2.getPrice()) +(sale4.getSalePrice() - car3.getPrice()) +(sale5.getSalePrice() - car3.getPrice())+ (sale6.getSalePrice() - car2.getPrice()) +(sale7.getSalePrice() - car2.getPrice())+(sale8.getSalePrice() - car2.getPrice()) +(sale9.getSalePrice() - car2.getPrice())+(sale10.getSalePrice() - car2.getPrice())
+print(f"The overall profit of all sales made:",profit_overall) #display the profit
+
+sales = [sale1, sale2, sale3, sale4, sale5] #store the first 5 sales related to the first saleperson on a list
+cars = [car1, car2, car2, car3, car3] #store the cars made on the first 5 sales by the first saleperson
+# Calculate the salaries of salesperson based on sales
+# and the commission they receive for each car.
+sales_salaries = [salesperson1.calculate_salary(cars[i], float(sales[i].salePrice))[0] for i in range(len(sales))]
+# Calculate the total salary of the sales by summing salaries,
+# and then subtracting four times the basic salary of the first salesperson( to keep 1 salary counted as we want this's month salary).
+total_sales_salary = sum(sales_salaries) - 4*salesperson1.getBasicSalary()
+print("Salesperson's 1 salary this month:", total_sales_salary) #get this month salary
+
+sales = [sale6, sale7, sale8, sale9, sale10] #store the second 5 sales related to the second saleperson on a list
+# Calculate the salaries of salesperson based on sales
+# and the commission they receive for each car.
+salaries = [salesperson2.calculate_salary(car2, float(sale.salePrice))[0] for sale in sales]
+# Calculate the total salary of the sale by summing salaries,
+# and then subtracting four times the basic salary of the first salesperson( to keep 1 salary counted as we want this's month salary ).
+totalSales2 = sum(salaries) - 4 * salesperson2.getBasicSalary()
+print("Salesperson's 2 salary this month:", totalSales2) #get this month salary
+
+#manager salary after each sale
+manager_salaries = [sale[1] for sale in [salary1, salary2, salary3, salary4, salary5, salary6, salary7, salary8, salary9, salary10]]
+print("Manager's salary this month:", sum(manager_salaries[len(manager_salaries)-10:]) - 9 * manager.getBasicSalary()) #get this month salary
+
+#Calculate total revenue for the company after each sale 
+totalRevenue = sale1.getSalePrice() + sale2.getSalePrice() + sale3.getSalePrice() + sale4.getSalePrice() + sale5.getSalePrice() + sale6.getSalePrice() + sale7.getSalePrice() + sale8.getSalePrice() + sale9.getSalePrice() + sale10.getSalePrice()
+#get this month revenue
+print("Company revenue this month:", profit_overall-(sum(sales_salaries) - 5*salesperson1.getBasicSalary())- (sum(salaries) - 5 * salesperson2.getBasicSalary()) - (sum(manager_salaries[len(manager_salaries)-10:]) - 10 * manager.getBasicSalary()))
+
