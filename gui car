@@ -1,0 +1,216 @@
+import tkinter as tk
+import pickle
+import os.path
+from tkinter import messagebox
+
+
+class Car:
+    def __init__(self, carName, carIdNumber, price, carType, fuelCapacity, year, maxSpeed, color):
+        self.carName = carName
+        self.carIdNumber = carIdNumber
+        self.price = price
+        self.carType = carType
+        self.fuelCapacity = fuelCapacity
+        self.year = year
+        self.maxSpeed = maxSpeed
+        self.color = color
+
+    def setCarName(self, carName):
+        self.carName = carName
+
+    def getCarName(self):
+        return self.carName
+
+    def setPrice(self, price):
+        self.price = price
+
+    def getPrice(self):
+        return self.price
+
+    def setCarIdNumber(self, carIdNumber):
+        self.carIdNumber = carIdNumber
+
+    def getCarIdNumber(self):
+        return self.carIdNumber
+
+    def displayInfo(self):
+        print(
+            f"\nCar Info:\ncarName: {self.carName}\ncarIdNumber: {self.carIdNumber}\nprice: {self.price}\ncarType: {self.carType}\nfuelCapacity: {self.fuelCapacity}\nyear: {self.year}\nmaxSpeed: {self.maxSpeed}\ncolor: {self.color}")
+
+
+class Company:
+    def __init__(self, companyName):
+        self.companyName = companyName
+        self.employees = []
+        self.cars = []
+
+    def getCarsDetails(self, carIdNumber):
+        for car in self.cars:
+            if car.carIdNumber == carIdNumber:
+                return f"Name: {car.carName}, ID Number: {car.carIdNumber}, Price: {car.price}, Type: {car.carType},Fuel Capacity: {car.fuelCapacity}, Year: {car.year}, Max Speed: {car.maxSpeed}, Color: {car.color}"
+        return "Car not found."
+
+class Application():
+    def __init__(self, master):
+        self.master = master
+        self.master.title("B&M Company Management System")
+        self.master.geometry("400x400")
+        tk.Label(self.master, text="Employee Management").grid(row=0, column=0)
+        tk.Label(self.master, text="Car Name").grid(row=1, column=0)
+        tk.Label(self.master, text=" ID Number").grid(row=2, column=0)
+        tk.Label(self.master, text=" Price").grid(row=3, column=0)
+        tk.Label(self.master, text=" Type").grid(row=4, column=0)
+        tk.Label(self.master, text="Fuel Capacity").grid(row=5, column=0)
+        tk.Label(self.master, text="Year").grid(row=6, column=0)
+        tk.Label(self.master, text="Max Speed").grid(row=7, column=0)
+        tk.Label(self.master, text="Color").grid(row=8, column=0)
+        self.carNameEntry = tk.Entry(self.master)
+        self.carIdNumberEntry = tk.Entry(self.master)
+        self.priceEntry = tk.Entry(self.master)
+        self.carTypeEntry = tk.Entry(self.master)
+        self.fuelCapacityEntry = tk.Entry(self.master)
+        self.yearEntry = tk.Entry(self.master)
+        self.maxSpeedEntry = tk.Entry(self.master)
+        self.colorEntry = tk.Entry(self.master)
+        self.carNameEntry.grid(row=1, column=1)
+        self.carIdNumberEntry.grid(row=2, column=1)
+        self.priceEntry.grid(row=3, column=1)
+        self.carTypeEntry.grid(row=4, column=1)
+        self.fuelCapacityEntry.grid(row=5, column=1)
+        self.yearEntry.grid(row=6, column=1)
+        self.maxSpeedEntry.grid(row=7, column=1)
+        self.colorEntry.grid(row=8, column=1)
+        tk.Button(self.master, text="Add Car", command=self.addCar).grid(row=9, column=0)
+        tk.Button(self.master, text="Delete Car", command=self.deleteCar).grid(row=9, column=1)
+        tk.Button(self.master, text="Modify Car", command=self.modifyCar).grid(row=9, column=2)
+
+    def addCar(self):
+        carName = self.carNameEntry.get()
+        carIdNumber = self.carIdNumberEntry.get()
+        price = self.priceEntry.get()
+        carType = self.carTypeEntry.get()
+        fuelCapacity = self.fuelCapacityEntry.get()
+        year = self.yearEntry.get()
+        maxSpeed = self.maxSpeedEntry.get()
+        color = self.colorEntry.get()
+
+        car = Car(carName, carIdNumber, price, carType, fuelCapacity, year, maxSpeed, color)
+        try:
+            with open('cars.bin', 'rb') as f:
+                if os.path.getsize('cars.bin') > 0:
+                    company = pickle.load(f)
+                else:
+                    company = Company("B&M Company")
+        except FileNotFoundError:
+            company = Company("B&M Company")
+
+        company.cars.append(car)
+        with open('cars.bin', 'wb') as f:
+            pickle.dump(company, f)
+
+        self.carNameEntry.delete(0, tk.END)
+        self.carIdNumberEntry.delete(0, tk.END)
+        self.priceEntry.delete(0, tk.END)
+        self.carTypeEntry.delete(0, tk.END)
+        self.fuelCapacityEntry.delete(0, tk.END)
+        self.yearEntry.delete(0, tk.END)
+        self.maxSpeedEntry.delete(0, tk.END)
+        self.colorEntry.delete(0, tk.END)
+        # Create and add success message label
+        success_label = tk.Label(self.master, text="Car added successfully!")
+        success_label.grid(row=10, column=0, columnspan=2)
+        # get employee details
+        car_details = company.getCarsDetails(carIdNumber)
+
+        # print employee details to console
+        if car_details:
+            print(car_details)
+        else:
+            print(f"No Car with ID {carIdNumber} found.")
+
+    def deleteCar(self):
+        carIdNumber = self.carIdNumberEntry.get()
+        # Load existing employees
+        try:
+            with open('cars.bin', 'rb') as f:
+                company = pickle.load(f)
+        except FileNotFoundError:
+            tk.messagebox.showinfo("Error", "No cars found")
+            return
+
+        # Find employee with matching ID and remove from list
+        found = False
+        for i, car in enumerate(company.cars):
+            if car.carIdNumber == carIdNumber:
+                del company.cars[i]
+                found = True
+                break
+
+        # Save updated employee list
+        with open('cars.bin', 'wb') as f:
+            pickle.dump(company, f)
+        # Clear input field
+        self.carIdNumberEntry.delete(0, tk.END)
+        # Show result message
+        if found:
+            tk.messagebox.showinfo("Success", f"Car with ID {carIdNumber} deleted")
+        else:
+            tk.messagebox.showinfo("Error", f"No Car with ID {carIdNumber} found")
+
+    def modifyCar(self):
+        # Get employee ID to modify
+        carIdNumber = input("Enter Car ID to modify: ")
+
+        # Load existing employees
+        try:
+            with open('cars.bin', 'rb') as f:
+                company = pickle.load(f)
+        except FileNotFoundError:
+            print("No cars found.")
+            return
+
+        # Find employee by ID
+        found_car = False
+        for car in company.cars:
+            if car.carIdNumber == carIdNumber:
+                found_car = True
+                # Modify employee details
+                print("Current details:")
+                print(
+                    f"\nCar Info:\ncarName: {car.carName}\ncarIdNumber: {car.carIdNumber}\nprice: {car.price}\ncarType: {car.carType}\nfuelCapacity: {car.fuelCapacity}\nyear: {car.year}\nmaxSpeed: {car.maxSpeed}\ncolor: {car.color}")
+                car.carName = input(
+                    "Enter new name (leave blank to keep current name): ") or car.carName
+                car.carIdNumber = input(
+                    "Enter new IdNumber (leave blank to keep current IdNumber): ") or car.carIdNumber
+                car.price = float(input("Enter new price (leave blank to keep current price): ") or car.price)
+                car.carType = input("Enter new carType (leave blank to keep current carType): ") or car.carType
+                car.fuelCapacity = float(
+                    input("Enter new fuelCapacity (leave blank to keep current fuelCapacity): ") or car.fuelCapacity)
+                car.year = int(
+                    input("Enter new year (leave blank to keep current year): ") or car.year)
+                car.maxSpeed = float(
+                    input("Enter new maxSpeed (leave blank to keep current maxSpeed): ") or car.maxSpeed)
+                car.color = input("Enter new color (leave blank to keep current color): ") or car.color
+
+                break
+        # Save updated employee list
+        with open('cars.bin', 'wb') as f:
+            pickle.dump(company, f)
+
+        if not found_car:
+            print("car not found.")
+        # Create and add success message label
+        success_label = tk.Label(self.master, text="Car Modified successfully!")
+        success_label.grid(row=10, column=0, columnspan=2)
+        # get employee details
+        car_details = company.getCarsDetails(carIdNumber)
+
+        # print employee details to console
+        if car_details:
+            print(car_details)
+        else:
+            print(f"No Car with ID {carIdNumber} found.")
+
+root = tk.Tk()
+app = Application(root)
+root.mainloop()
