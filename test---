@@ -1,0 +1,16 @@
+# Create some cars
+car1 = Car("Honda Civic", 1234, 20000, CarType.SUV.name, 13, 2001, 200,Color.White.name )
+car2 = Car("Tesla", "1456",1380000, CarType.Sedan.name, 20, 2023, 150, Color.Red.name)
+car3 = Car("Ford", "6789",10000, CarType.Hatch.name, 20, 2013, 170, Color.Black.name)
+# Add the cars to the company
+company.setCars(car1)
+company.setCars(car2)
+company.setCars(car3)
+
+# Get car details by name
+details = company.getCarDetails(1234)
+print(details)  
+
+# Test getting non-existing car details
+details = company.getCarDetails("Toyota Camry")
+print(details)  
