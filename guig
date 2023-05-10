@@ -1,0 +1,39 @@
+class Car:
+    def __init__(self, carName, carIdNumber, price, carType, fuelCapacity, year, maxSpeed, color):
+        self.carName = carName
+        self.carIdNumber = carIdNumber
+        self.price = price
+        self.carType = carType
+        self.fuelCapacity = fuelCapacity
+        self.year = year
+        self.maxSpeed = maxSpeed
+        self.color = color
+    #setter and getter methods
+    def setCarName(self, carName):
+        self.carName = carName
+    def getCarName(self):
+        return self.carName
+    def setPrice(self, price):
+        self.price = price
+    def getPrice(self):
+        return self.price
+    def setCarIdNumber(self, carIdNumber):
+        self.carIdNumber = carIdNumber
+    def getCarIdNumber(self):
+        return self.carIdNumber
+    def displayInfo(self): #function to display all info
+        print(
+            f"\nCar Info:\ncarName: {self.carName}\ncarIdNumber: {self.carIdNumber}\nprice: {self.price}\ncarType: {self.carType}\nfuelCapacity: {self.fuelCapacity}\nyear: {self.year}\nmaxSpeed: {self.maxSpeed}\ncolor: {self.color}")
+
+
+class Company:
+    def __init__(self, companyName):
+        self.companyName = companyName
+        self.employees = []
+        self.cars = []
+
+    def getCarsDetails(self, carIdNumber):
+        for car in self.cars:
+            if car.carIdNumber == carIdNumber:
+                return f"Name: {car.carName}, ID Number: {car.carIdNumber}, Price: {car.price}, Type: {car.carType},Fuel Capacity: {car.fuelCapacity}, Year: {car.year}, Max Speed: {car.maxSpeed}, Color: {car.color}"
+        return "Car not found."
